@@ -1,0 +1,22 @@
+
+var canDrive= function(age) {
+
+    if(age > 16) {
+       return true
+    } else {
+      return false
+
+    }
+
+}
+
+var is_able_to_drive = canDrive(17);
+
+
+if(is_able_drive) {
+   console.log("Can Rent Golf Cart");
+}
+
+if(is_able_drive) {
+   console.log("Can buy a BB GUn");
+}
