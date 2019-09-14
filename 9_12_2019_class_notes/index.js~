@@ -1,0 +1,11 @@
+var ARPA = 10;
+
+var MM = 15;
+
+var churn = 5;
+
+var LTV = (ARPA*MM)/churn;
+
+console.log(LTV);
+
+console.log("Steve thinks the LTV should be " + LTV);
