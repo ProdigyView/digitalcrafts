@@ -28,7 +28,7 @@ if(x == y) {
 
 
 var Marvel = "Marvel";
-var DC = "DCISAWESOME";
+var DC = "dCISAWESOME";
 
 if(Marvel == DC) {
    console.log("They are equal");
