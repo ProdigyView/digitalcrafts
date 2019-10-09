@@ -60,6 +60,9 @@ var makeBoard = function() {
         var rowElement = document.createElement("div");
         rowElement.className="row"
 
+        //Start making the multidimensional array.
+        //The row is the first array which then
+        //creates another array inside of it.
         boardData[row] = [];
 
         //Create The Columns that will go into the rows
