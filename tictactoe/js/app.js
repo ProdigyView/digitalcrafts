@@ -12,6 +12,7 @@
  * getElementById - https://www.w3schools.com/jsref/met_document_getelementbyid.asp
  * createElement - https://www.w3schools.com/jsref/met_document_createelement.asp
  * appendChild - https://www.w3schools.com/jsref/met_node_appendchild.asp
+ * innerHtml - https://www.w3schools.com/jsref/prop_html_innerhtml.asp
  * split - https://www.w3schools.com/jsref/jsref_split.asp
  * alert - https://www.w3schools.com/jsref/met_win_alert.asp
  * onlclick - https://www.w3schools.com/jsref/event_onclick.asp
