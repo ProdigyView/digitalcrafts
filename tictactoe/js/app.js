@@ -1,8 +1,49 @@
+/**
+ * TicTacToe
+ * 
+ * The following is an application for creating a TicTacToe
+ * game in javacscript.
+ * 
+ * - Functions -
+ * Please review the following functions that are used throughout
+ * this solution.
+ * 
+ * document - https://www.w3schools.com/js/js_htmldom_document.asp
+ * getElementById - https://www.w3schools.com/jsref/met_document_getelementbyid.asp
+ * createElement - https://www.w3schools.com/jsref/met_document_createelement.asp
+ * appendChild - https://www.w3schools.com/jsref/met_node_appendchild.asp
+ * split - https://www.w3schools.com/jsref/jsref_split.asp
+ * alert - https://www.w3schools.com/jsref/met_win_alert.asp
+ * onlclick - https://www.w3schools.com/jsref/event_onclick.asp
+ * 
+ * - Grid System -
+ * The grid system is a multi-dimensional array. Please read here on
+ * multidimensional arrays: 
+ * https://www.javascripttutorial.net/javascript-multidimensional-array/
+ * 
+ * In our use case, the board is a multi-dimensional array as such:
+ * 
+ * ******************
+ *  0,0 | 0,1 | 0,2 *
+ * ******************
+ *  1,0 | 1,1 | 1,2 *
+ * ******************
+ *  2,0 | 2,1 | 2,2 *
+ * ******************
+ * 
+ * Think of the numbers in the grid as coordinates. Calling 1,1
+ * with boardData[1][1] will give you access to the block at the
+ * center of the grid. Each space on the board can be accessed
+ * with the corresponding coordinate.
+ * 
+ */
+
 
 //Retrieve the board div
 var boardElement = document.getElementById("board");
 
 //Set the board represential data
+//This will be the multidimensional grid
 var boardData = [];
 
 //Set the current Player
@@ -37,23 +78,35 @@ var makeBoard = function() {
                 
                 //Get the id assigned to the column
                 var idString = this.id;
-                //Split the id into an array, the index 0
-                //will be the row, and the index 1
-                //will be the column
+                //Split the id into an array of coordinations
                 var idArray = idString.split("-");
 
                 //Execute a click action
                 if(this.innerHTML == getXPiece() || this.innerHTML == getOPiece()){
                     alert("You cannot change this piece");
                 } else if(currentPlayer == "player1") {
+                    /**
+                     * If the player is player 1, get the X piece
+                     * and then switch to player 2
+                     */
                     this.innerHTML = getXPiece();
                     currentPlayer = "player2";
+
+                    //After the move, check if any of the winning
+                    //conditions have been met
                     checkWinVertical(idArray[0], idArray[1], getXPiece());
                     checkWinHorizantal(idArray[0], idArray[1], getXPiece());
                     checkWinDiagonal(idArray[0], idArray[1], getXPiece());
                 } else if(currentPlayer == "player2"){
+                    /**
+                     * If the player is player 1, get the X piece
+                     * and then switch to player 2
+                     */
                     this.innerHTML = getOPiece();
                     currentPlayer = "player1";
+
+                    //After the move, check if any of the winning
+                    //conditions have been met
                     checkWinVertical(idArray[0], idArray[1], getOPiece());
                     checkWinHorizantal(idArray[0], idArray[1], getOPiece());
                     checkWinDiagonal(idArray[0], idArray[1], getOPiece());
@@ -61,12 +114,16 @@ var makeBoard = function() {
                 
             } 
 
+            //Add the columnElement to the multidimensional array
             boardData[row][column] = columnElement;
 
+            //Add the html of the element to the row
             rowElement.appendChild(columnElement);
 
         }
 
+        //Add the html to the board, this will
+        //update the html on the website
         boardElement.appendChild(rowElement);
 
     }
@@ -160,5 +217,5 @@ var checkWinDiagonal = function(row, column, piece) {
 
 }
 
-
+//Call the function that makes the grid
 makeBoard();
