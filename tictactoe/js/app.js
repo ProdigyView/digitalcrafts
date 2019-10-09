@@ -27,19 +27,18 @@ var makeBoard = function() {
                 var idString = this.id;
                 var idArray = idString.split("-");
 
-                console.log("My ID");
-                console.log(idArray);
-
                 if(this.innerHTML == getXPiece() || this.innerHTML == getOPiece()){
                     alert("You cannot change this piece");
                 } else if(currentPlayer == "player1") {
                     this.innerHTML = getXPiece();
                     currentPlayer = "player2";
                     checkWinVertical(idArray[0], idArray[1], getXPiece());
+                    checkWinHorizantal(idArray[0], idArray[1], getXPiece());
                 } else if(currentPlayer == "player2"){
                     this.innerHTML = getOPiece();
                     currentPlayer = "player1";
                     checkWinVertical(idArray[0], idArray[1], getOPiece());
+                    checkWinHorizantal(idArray[0], idArray[1], getOPiece());
                 }
                 
             } 
@@ -64,25 +63,47 @@ var getOPiece = function() {
 }
 
 var checkWinVertical = function(row, column, piece) {
-
-    //console.log("Positions Passed In");
-    //console.log(row);
-    //console.log(column);
-    //console.log(piece);
-
-    //console.log("Pieces");
-    //console.log(boardData[row-1]);
-    //console.log(boardData[row-1][column].innerHTML);
     var points = 0;
+
+    if(boardData[row-2] && boardData[row-1][column] && boardData[row-2][column].innerHTML == piece) {
+        points++;
+    }
 
     if(boardData[row-1] && boardData[row-1][column] && boardData[row-1][column].innerHTML == piece) {
         points++;
-        console.log("Point 1 Added");
     }
 
     if(boardData[row+1] && boardData[row+1][column] && boardData[row+1][column].innerHTML == piece) {
         points++;
-        console.log("Point 2 Added");
+    }
+
+    if(boardData[row+2] && boardData[row+1][column] && boardData[row+2][column].innerHTML == piece) {
+        points++;
+    }
+
+    if(points >= 2) {
+        alert("You have won");
+    }
+
+}
+
+var checkWinHorizantal = function(row, column, piece) {
+    var points = 0;
+
+    if(boardData[row] && boardData[row][column-2] && boardData[row][column-2].innerHTML == piece) {
+        points++;
+    }
+
+    if(boardData[row] && boardData[row][column-1] && boardData[row][column-1].innerHTML == piece) {
+        points++;
+    }
+
+    if(boardData[row] && boardData[row][column+1] && boardData[row][column+1].innerHTML == piece) {
+        points++;
+    }
+
+    if(boardData[row] && boardData[row][column+2] && boardData[row][column+2].innerHTML == piece) {
+        points++;
     }
 
     if(points >= 2) {
@@ -92,5 +113,3 @@ var checkWinVertical = function(row, column, piece) {
 }
 
 makeBoard();
-console.log(boardData);
-boardData[1][1].innerHTML="Superman";
