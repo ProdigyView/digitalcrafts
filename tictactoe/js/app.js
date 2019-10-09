@@ -99,8 +99,8 @@ var makeBoard = function() {
                     checkWinDiagonal(idArray[0], idArray[1], getXPiece());
                 } else if(currentPlayer == "player2"){
                     /**
-                     * If the player is player 1, get the X piece
-                     * and then switch to player 2
+                     * If the player is player 2, get the O piece
+                     * and then switch to player 1
                      */
                     this.innerHTML = getOPiece();
                     currentPlayer = "player1";
