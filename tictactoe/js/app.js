@@ -40,186 +40,241 @@
  */
 
 
-//Retrieve the board div
-var boardElement = document.getElementById("board");
+ var TicTacToe = {
+    boardElement : null,
+    currentPlayerElement : null,
+    scoreBoardElement : null,
+    boardData : [],
+    currentPlayer : "player1",
+    player1Score: 0,
+    player2Score : 0,
+    setupElements : function(boardId, currentPlayerID, scoreBoardID) {
+        this.boardElement = document.getElementById(boardId);
+        this.currentPlayerElement = document.getElementById(currentPlayerID);
+        this.scoreBoardElement = document.getElementById(scoreBoardID);
+    },
+    makeBoard : function() {
+ 
+        //The Row
+        for(var row =0; row<3; row++) {
 
-//Set the board represential data
-//This will be the multidimensional grid
-var boardData = [];
+            rowElement = this.createBoardRow();
+            
+            this.boardData[row] = [];
 
-//Set the current Player
-var currentPlayer = "player1";
+            //Create The Columns that will go into the rows
+            for(var column=0; column<3; column++) {
 
-//Creates The Board
-var makeBoard = function() {
-    
-    //The Row
-    for(var row =0; row<3; row++) {
+                columnElement = this.createBoardColumn(row, column);
 
+                //Add the columnElement to the multidimensional array
+                this.boardData[row][column] = columnElement;
+
+                //Add the html of the element to the row
+                rowElement.appendChild(columnElement);
+
+            }
+
+            this.boardElement.appendChild(rowElement);
+
+        }
+    },
+    createBoardRow : function() {
         //Create row html element
         var rowElement = document.createElement("div");
         rowElement.className="row"
 
-        //Start making the multidimensional array.
-        //The row is the first array which then
-        //creates another array inside of it.
-        boardData[row] = [];
+        return rowElement;
+    },
+    createBoardColumn : function(row, column) {
 
-        //Create The Columns that will go into the rows
-        for(var column=0; column<3; column++) {
+        //Create a column element
+        var columnElement = document.createElement("div");
+        //Assign a class to the column element
+        columnElement.className ="col border board-piece justify-content-center align-items-center text-center";
+        //Set Default text to the columnelment
+        columnElement.innerHTML = "Row " + row + " Column " + column;
+        //Set an id of the coordinates as the current row and column
+        columnElement.id= row + "-" + column;
+        //Set the sytle via js
+        columnElement.style="padding-top:5%"
 
-            //Create a column element
-            var columnElement = document.createElement("div");
-            //Assign a class to the column element
-            columnElement.className ="col border board-piece";
-            //Set Default text to the columnelment
-            columnElement.innerHTML = "Row " + row + " Column " + column;
-            //Set an id of the coordinates as the current row and column
-            columnElement.id= row + "-" + column;
+        var parentObject = this;
 
-            //Set the onclick for when a user clicks the column
-            columnElement.onclick = function() {
-                
-                //Get the id assigned to the column
-                var idString = this.id;
-                //Split the id into an array of coordinations
-                var idArray = idString.split("-");
+        //Set the onclick for when a user clicks the column
+        columnElement.onclick = function() {
+            
+            //Get the id assigned to the column
+            var idString = this.id;
+            //Split the id into an array of coordinations
+            var idArray = idString.split("-");
 
-                //Execute a click action
-                if(this.innerHTML == getXPiece() || this.innerHTML == getOPiece()){
-                    alert("You cannot change this piece");
-                } else if(currentPlayer == "player1") {
-                    /**
-                     * If the player is player 1, get the X piece
-                     * and then switch to player 2
-                     */
-                    this.innerHTML = getXPiece();
-                    currentPlayer = "player2";
+            //Execute a click action
+            if(this.innerHTML == parentObject.getXPiece() || this.innerHTML == parentObject.getOPiece()){
+                alert("You cannot change this piece");
+            } else if(parentObject.currentPlayer == "player1") {
+                /**
+                 * If the player is player 1, get the X piece
+                 * and then switch to player 2
+                 */
+                this.innerHTML = parentObject.getXPiece();
+                parentObject.currentPlayer = "player2";
 
-                    //After the move, check if any of the winning
-                    //conditions have been met
-                    checkWinVertical(idArray[0], idArray[1], getXPiece());
-                    checkWinHorizantal(idArray[0], idArray[1], getXPiece());
-                    checkWinDiagonal(idArray[0], idArray[1], getXPiece());
-                } else if(currentPlayer == "player2"){
-                    /**
-                     * If the player is player 2, get the O piece
-                     * and then switch to player 1
-                     */
-                    this.innerHTML = getOPiece();
-                    currentPlayer = "player1";
+                parentObject.setScoreBoard();
+                parentObject.setPlayerTurn();
+                parentObject.checkWin(idArray[0], idArray[1], parentObject.getOPiece());
+            } else if(parentObject.currentPlayer == "player2"){
+                /**
+                 * If the player is player 2, get the O piece
+                 * and then switch to player 1
+                 */
+                this.innerHTML = parentObject.getOPiece();
+                parentObject.currentPlayer = "player1";
 
-                    //After the move, check if any of the winning
-                    //conditions have been met
-                    checkWinVertical(idArray[0], idArray[1], getOPiece());
-                    checkWinHorizantal(idArray[0], idArray[1], getOPiece());
-                    checkWinDiagonal(idArray[0], idArray[1], getOPiece());
-                }
-                
-            } 
+                parentObject.setScoreBoard();
+                parentObject.setPlayerTurn();
+                parentObject.checkWin(idArray[0], idArray[1], parentObject.getOPiece());
+            }
+            
+        }
+        
+        return columnElement;
 
-            //Add the columnElement to the multidimensional array
-            boardData[row][column] = columnElement;
+    },
+    getXPiece : function() {
+        return '<i class="fas fa-times fa-10x"></i>';
+    },
+    getOPiece : function() {
+        return '<i class="far fa-circle fa-10x"></i>';
+    },
+    checkWin : function(row, column, piece) {
 
-            //Add the html of the element to the row
-            rowElement.appendChild(columnElement);
+        var hasWon = false;
 
+        if(this.checkWinDiagonal(row, column, piece)) {
+            hasWon = true;
+        } else if(this.checkWinHorizantal(row, column, piece)) {
+            hasWon = true;
+        } else if(this.checkWinVertical(row, column, piece)) {
+            hasWon = true;
         }
 
-        //Add the html to the board, this will
-        //update the html on the website
-        boardElement.appendChild(rowElement);
+        if(hasWon) {
+            this.executeWin();
+        }
+    },
+    checkWinVertical : function(row, column, piece) {
+        var points = 0;
+    
+        if(this.boardData[row-2] && this.boardData[row-1][column] && this.boardData[row-2][column].innerHTML == piece) {
+            points++;
+        }
+    
+        if(this.boardData[row-1] && this.boardData[row-1][column] && this.boardData[row-1][column].innerHTML == piece) {
+            points++;
+        }
+    
+        if(this.boardData[row+1] && this.boardData[row+1][column] && this.boardData[row+1][column].innerHTML == piece) {
+            points++;
+        }
+    
+        if(this.boardData[row+2] && this.boardData[row+1][column] && this.boardData[row+2][column].innerHTML == piece) {
+            points++;
+        }
+    
+        if(points >= 2) {
+           return true;
+        }
 
+        return false;
+    },
+    checkWinHorizantal : function(row, column, piece) {
+        var points = 0;
+    
+        if(this.boardData[row] && this.boardData[row][column-2] && this.boardData[row][column-2].innerHTML == piece) {
+            points++;
+        }
+    
+        if(this.boardData[row] && this.boardData[row][column-1] && this.boardData[row][column-1].innerHTML == piece) {
+            points++;
+        }
+    
+        if(this.boardData[row] && this.boardData[row][column+1] && this.boardData[row][column+1].innerHTML == piece) {
+            points++;
+        }
+    
+        if(this.boardData[row] && this.boardData[row][column+2] && this.boardData[row][column+2].innerHTML == piece) {
+            points++;
+        }
+    
+        if(points >= 2) {
+            return true;
+        }
+    
+        return false;
+    },
+    checkWinDiagonal : function(row, column, piece) {
+        var points = 0;
+    
+        if(this.boardData[row-2] && this.boardData[row-2][column-2] && this.boardData[row-2][column-2].innerHTML == piece) {
+            points++;
+        }
+    
+        if(this.boardData[row-1] && this.boardData[row-1][column-1] && this.boardData[row-1][column-1].innerHTML == piece) {
+            points++;
+        }
+    
+        if(this.boardData[row+1] && this.boardData[row+1][column+1] && this.boardData[row+1][column+1].innerHTML == piece) {
+            points++;
+        }
+    
+        if(this.boardData[row+2] && this.boardData[row+2][column+2] && this.boardData[row+2][column+2].innerHTML == piece) {
+            points++;
+        }
+    
+        if(points >= 2) {
+            return true;
+        }
+    
+        return false;
+    }, 
+    resetGame : function() {
+        this.boardElement.innerHTML = "";
+        this.boardData = [];
+        this.makeBoard();
+    },
+    executeWin : function() {
+
+        var message = "";
+
+        if(this.currentPlayer == "player1") {
+            this.player1Score++;
+            message = "Player 1 has won!"
+            
+        } else {
+            this.player2Score++;
+            message = "Player 2 has won!"
+        }
+
+        alert(message);
+        this.setScoreBoard();
+        this.resetGame();
+    },
+    setPlayerTurn : function() {
+        console.log("Home Alone");
+        if(this.currentPlayer == "player1") {
+            this.currentPlayerElement.innerHTML = "Player 1 Turn"
+        } else {
+            this.currentPlayerElement.innerHTML = "Player 2 Turn"
+        }
+    },
+    setScoreBoard : function() {
+        this.scoreBoardElement.innerHTML = "<p>Player 1 Wins: " + this.player1Score + "</p> <p>Player 2 Wins: " + this.player2Score + "</p>";
+    },
+    startGame : function() {
+        this.makeBoard();
+        this.setPlayerTurn();
+        this.setScoreBoard();
     }
-}
 
-//Get the represenation of the X piece
-var getXPiece = function() {
-    return "X";
-}
-
-//Get the representation of the O piece
-var getOPiece = function() {
-    return "O";
-}
-
-//Check to see if a user has won vertically
-var checkWinVertical = function(row, column, piece) {
-    var points = 0;
-
-    if(boardData[row-2] && boardData[row-1][column] && boardData[row-2][column].innerHTML == piece) {
-        points++;
-    }
-
-    if(boardData[row-1] && boardData[row-1][column] && boardData[row-1][column].innerHTML == piece) {
-        points++;
-    }
-
-    if(boardData[row+1] && boardData[row+1][column] && boardData[row+1][column].innerHTML == piece) {
-        points++;
-    }
-
-    if(boardData[row+2] && boardData[row+1][column] && boardData[row+2][column].innerHTML == piece) {
-        points++;
-    }
-
-    if(points >= 2) {
-        alert("You have won");
-    }
-
-}
-
-//Check to see if a user has won horizantally
-var checkWinHorizantal = function(row, column, piece) {
-    var points = 0;
-
-    if(boardData[row] && boardData[row][column-2] && boardData[row][column-2].innerHTML == piece) {
-        points++;
-    }
-
-    if(boardData[row] && boardData[row][column-1] && boardData[row][column-1].innerHTML == piece) {
-        points++;
-    }
-
-    if(boardData[row] && boardData[row][column+1] && boardData[row][column+1].innerHTML == piece) {
-        points++;
-    }
-
-    if(boardData[row] && boardData[row][column+2] && boardData[row][column+2].innerHTML == piece) {
-        points++;
-    }
-
-    if(points >= 2) {
-        alert("You have won");
-    }
-
-}
-
-//Check to see if a user has one on a diagonal
-var checkWinDiagonal = function(row, column, piece) {
-    var points = 0;
-
-    if(boardData[row-2] && boardData[row-2][column-2] && boardData[row-2][column-2].innerHTML == piece) {
-        points++;
-    }
-
-    if(boardData[row-1] && boardData[row-1][column-1] && boardData[row-1][column-1].innerHTML == piece) {
-        points++;
-    }
-
-    if(boardData[row+1] && boardData[row+1][column+1] && boardData[row+1][column+1].innerHTML == piece) {
-        points++;
-    }
-
-    if(boardData[row+2] && boardData[row+2][column+2] && boardData[row+2][column+2].innerHTML == piece) {
-        points++;
-    }
-
-    if(points >= 2) {
-        alert("You have won");
-    }
-
-}
-
-//Call the function that makes the grid
-makeBoard();
+ };

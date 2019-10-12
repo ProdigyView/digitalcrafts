@@ -2,18 +2,29 @@
 <html>
     <head>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" />
         <link rel="stylesheet" href="css/style.css" />
 
     </head>
     <body>
         <div class="container">
             <h1 class="text-center" >TicTacToe</h1>
+            <div>
+                <p class="lead" id="currentPlayer"></p>
+            </div>
 
+            <div>
+                <strong>Scoreboard:</strong> <p id="score"></p>
+            </div>
             <div id="board"></div>
             
         </div>
     </body>
     
     <script type="text/javascript" src="js/app.js" ></script>
+    <script type="text/javascript">
+        TicTacToe.setupElements("board", "currentPlayer", "score");
+        TicTacToe.startGame();
+    </script>
 
 </html>
