@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <ul id="mylist">
+
+        </ul>
+    </body>
+    <script type="text/javascript">
+        var listElement = document.getElementById("mylist");
+
+        var animals = ["Dog", "Cat", "Ferret", "Cow", "Moose", "Wolf", "Bear"];
+
+        var myIntervalFunction = function(){ 
+             
+             var animal = animals.pop();
+ 
+             if(animals.length> 0) {
+                 listElement.append("<li>" + animal + "</li>");
+             } else {
+                 clearInterval(myAnimalInterval);
+             }
+     
+         };
+
+        var myAnimalInterval = setInterval(myIntervalFunction, 3000);
+        
+    </script>
+</html>

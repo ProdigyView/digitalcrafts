@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="text-center container">
+            <label>My Form</label>
+            <textarea class="form-control" id="my-input"></textarea>
+            <button class="btn btn-success" onclick="getData()">Submit</button>
+        </div>
+        <div id="output">
+
+        </div>
+    </body>
+    <script type="text/javascript">
+        var data = [];
+
+        var getData = function() {
+            var textAreaElement = document.getElementById("my-input");
+            var outputElement = document.getElementById("output");
+            
+            //Get the text area input
+            var content = textAreaElement.value;
+
+            if(content) {
+                //Store the data
+                data.push({text: content, date_sumbittied : Date()});
+
+                var outputHtml = document.createElement("p");
+                outputHtml.innerHTML = content;
+
+                outputElement.append(outputHtml);
+
+                //Resest text area input
+                textAreaElement.value = "";
+
+                console.log(data);
+            } else{
+                alert("No Content");
+            }
+        }
+    
+    </script>
+</html>

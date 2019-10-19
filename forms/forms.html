@@ -1,0 +1,123 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+        
+        <div id="formElements"></div>
+    </body>
+        <script type="text/javascript">
+
+            /**
+            * Below we are going to create different type of form elements in html. To start, please
+            * read the following information on each form element:
+            *
+            * password: https://www.w3schools.com/tags/att_input_type_password.asp
+            * textarea : https://www.w3schools.com/tags/tag_textarea.asp
+            * text: https://www.w3schools.com/tags/tag_input.asp
+            * checkbox: https://www.w3schools.com/tags/att_input_type_checkbox.asp
+            *
+            * Your task is to:
+            * 1. Iterate through the array, and create an element based on the type. 
+            * 2. The properites disabled, id, value and class will relate to that elements object
+            * and should appear in the html. For example, id : "my-text" should be <input type="text" id="my-text" />
+            * 3. As each form element is created, a button should be created. When that button is clicked, is should update
+            * the approrpiate object in the data array. For example, value : "A line of text" at array index 0 should be updated
+            * when the button for the text input is clicked
+            */
+            var data = [
+                {
+                    type: "text",
+                    disabled : false,
+                    id : "my-text",
+                    value : "A line of text",
+                    class : "form-control",
+                    maxLength: 255,
+                    style: "font-size: 15px;"
+                },
+                {
+                    type: "password",
+                    disabled : false,
+                    id : "my-passwod",
+                    value : "",
+                    class : "form-control"
+                },
+                {
+                    type: "textarea",
+                    disabled : false,
+                    id : "my-textarea",
+                    value : "Hello World, How Are You?",
+                    style: "background-color: blue;",
+                    class : "form-control"
+                },
+                {
+                    type: "checkbox",
+                    disabled : true,
+                    id : "my-checkbox",
+                    value : "1",
+                    class : ""
+                },
+            ];
+    
+            var formContainer = document.getElementById("formElements");
+
+            data.forEach(function(item, index){
+                
+                var element = null
+
+                if(item.type == "text" || item.type== "checkbox" || item.type=="password") {
+                    element = document.createElement("input");
+
+                    if(item.type == "text") {
+                        element.type="text";
+                        //element.setAttribute("type", "text")
+                    } else if(item.type == "checkbox") {
+                        element.type="checkbox";
+                        //element.setAttribute("type", "checkbox")
+                    } else if(item.type == "password") {
+                        element.type="password";
+                        //element.setAttribute("type", "password")
+                    }
+                } else if(item.type == "textarea") {
+                    element = document.createElement("textarea");
+                }
+
+                if(item.class) {
+                    element.setAttribute("class", item.class);
+                }
+
+                if(item.disabled) {
+                    element.setAttribute("disabled", "disabled");
+                }
+
+                if(item.id) {
+                    element.setAttribute("id", item.id);
+                }
+
+                if(item.style) {
+                    element.setAttribute("style", item.style);
+                }
+
+                if(item.value) {
+                    element.setAttribute("value", item.value);
+                }
+
+                var formLabel = document.createElement("label");
+                formLabel.innerHTML = "Element " + item.id;
+
+                var hr = document.createElement("hr");
+
+                formContainer.append(formLabel);
+                formContainer.append(element);
+                formContainer.append(hr);
+
+            });
+    
+            var createHtmlFromObject = function(dataObject) {
+    
+            }
+        
+        </script>
+    
+    
+</html>
